@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 
+
 def calcHist(img_path):
     img = cv2.imread(img_path)
     # img = cv2.split(img)
@@ -13,8 +14,9 @@ def calcHist(img_path):
     g_hist = cv2.calcHist([img], [1], None, [256], [0,256])
     r_hist = cv2.calcHist([img], [2], None, [256], [0,256])
 
-    return np.array([b_hist,g_hist,r_hist])
+    return np.array([b_hist,g_hist,r_hist]).flatten().reshape(1,-1)
 
 def distanceEuclidian(hist1,hist2):
     return np.linalg.norm(hist1 - hist2)
+
 

@@ -3,39 +3,32 @@ import os
 import sys
 import shutil
 import cv2
-import histogram
 import numpy as np
+import histogram
+import database
 
 app = Flask(__name__)
 
 dataset_path = r".\static\data\seg"
-histogram_path = r".\static\data\histograms"
 
 if (not os.path.exists(dataset_path)):
     sys.exit("NO IMAGES DATASET")
 
-def calcHists():
-    for scene in os.listdir(dataset_path):
-        scene_imgs = os.path.join(dataset_path,scene)
-        for image_name in os.listdir(scene_imgs):
-            img_path = os.path.join(scene_imgs,image_name)
-            
-            hist = histogram.calcHist(img_path)
-            # print(os.path.splitext(image_name))
-            np.save(os.path.join(histogram_path,os.path.splitext(image_name)[0]),hist)
-            # exit()
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        image = request.files['file']
-        return render_template('index.html',result=image)
+        file = request.files['file']
+        file_name = "temp" + os.path.splitext(file.filename)[1]
+        file_path = os.path.join(r"static",file_name)
+        file.save(file_path)
+
+        hist = histogram.calcHist(file_path)
+
+        results = database.search(hist)
+
+        return render_template('index.html', original = file_path,result=results)
     return render_template('index.html')
 
 if __name__ == '__main__':
-    if (not os.path.exists(histogram_path)):
-        os.makedirs(histogram_path)
-        calcHists()
-        
-    app.run(port=9000)
+    database.calcHists()
+    app.run(port=5000,debug=True)

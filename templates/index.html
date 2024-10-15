@@ -31,8 +31,11 @@
         </form>
     </div>
     <div class="search">
-        <img src="data\seg\buildings\0.jpg" alt="">
-        <h2> result: </h2>
+        {% if (original) %}
+            <h2> Original: </h2>
+            <img src="{{original}}" alt="">
+        {% endif %}
+        <h2> Result: </h2>
             {% for x in result %}
                 <img src="{{x}}">
             {% endfor %}
