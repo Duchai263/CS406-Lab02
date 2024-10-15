@@ -31,4 +31,4 @@ def index():
 
 if __name__ == '__main__':
     database.calcHists()
-    app.run(port=5000,debug=True)
+    app.run(port=5000)
