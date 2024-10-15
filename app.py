@@ -25,6 +25,7 @@ def calcHists():
             np.save(os.path.join(histogram_path,os.path.splitext(image_name)[0]),hist)
             # exit()
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -36,5 +37,5 @@ if __name__ == '__main__':
     if (not os.path.exists(histogram_path)):
         os.makedirs(histogram_path)
         calcHists()
-
+        
     app.run(port=9000)
